@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url('rose.jpg'); /* Replace with your image path */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+        .calculator {
+            width: 300px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        .screen {
+            width: 100%;
+            height: 50px;
+            font-size: 2rem;
+            text-align: right;
+            padding: 10px;
+            border: none;
+            background: #ddd;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        button {
+            padding: 15px;
+            font-size: 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background: #2196F3;
+            color: white;
+        }
+        button.operator { background: #f39c12; }
+        button.clear { background: #e74c3c; }
+        button.equal { background: #2ecc71; }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <input type="text" class="screen" id="screen" disabled>
+        <div class="buttons">
+            <button class="clear">C</button>
+            <button class="operator">/</button>
+            <button class="operator">*</button>
+            <button class="operator">-</button>
+            <button>7</button>
+            <button>8</button>
+            <button>9</button>
+            <button class="operator">+</button>
+            <button>4</button>
+            <button>5</button>
+            <button>6</button>
+            <button class="equal">=</button>
+            <button>1</button>
+            <button>2</button>
+            <button>3</button>
+            <button>0</button>
+            <button>.</button>
+        </div>
+    </div>
+
+    <script>
+        let screen = document.getElementById("screen");
+        let buttons = document.querySelectorAll("button");
+        let expression = "";
+
+        buttons.forEach(button => {
+            button.addEventListener("click", () => {
+                let value = button.innerText;
+                
+                if (value === "C") {
+                    expression = "";
+                    screen.value = "";
+                } else if (value === "=") {
+                    try {
+                        screen.value = eval(expression);
+                        expression = screen.value;
+                    } catch {
+                        screen.value = "Error";
+                        expression = "";
+                    }
+                } else {
+                    expression += value;
+                    screen.value = expression;
+                }
+            });
+        });
+
+        document.addEventListener("keydown", (event) => {
+            if ((event.key >= 0 && event.key <= 9) || "+-*/.".includes(event.key)) {
+                expression += event.key;
+                screen.value = expression;
+            } else if (event.key === "Enter") {
+                try {
+                    screen.value = eval(expression);
+                    expression = screen.value;
+                } catch {
+                    screen.value = "Error";
+                    expression = "";
+                }
+            } else if (event.key === "Backspace") {
+                expression = expression.slice(0, -1);
+                screen.value = expression;
+            } else if (event.key === "Escape") {
+                expression = "";
+                screen.value = "";
+            }
+        });
+    </script>
+</body>
+</html>
